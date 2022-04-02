@@ -17,13 +17,12 @@ with st.sidebar:
     
 if show_data:
     data = get_data(coin_symb, days)
-    print(data['prices'])
     fig = make_subplots(rows=3, cols=1)
-    fig.add_trace(go.Scatter(x=data['dates'], y=data['prices'], name='Price'),
+    fig.add_trace(go.Scatter(x=data['dates'], y=data['prices'], name='Price (USD)'),
                   row=1, col=1)
-    fig.add_trace(go.Scatter(x=data['dates'], y=data['market_caps'], name='Market Cap'), 
+    fig.add_trace(go.Scatter(x=data['dates'], y=data['market_caps'], name='Market Cap (USD)'), 
                   row=2, col=1)
-    fig.add_trace(go.Scatter(x=data['dates'], y=data['total_volumes'], name='Total Volume'), 
+    fig.add_trace(go.Scatter(x=data['dates'], y=data['total_volumes'], name='Total Volume (USD)'), 
                   row=3, col=1)
     fig.update_layout(height=1200, width=800, 
                       title_text=f"Price, Market Cap and Total Volume of {coin_symb.upper()}")
