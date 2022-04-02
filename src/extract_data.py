@@ -33,13 +33,11 @@ def get_market_chart(coin: str, days: int):
     return info
         
 
-def preprocess_data(coin: str, days: int):
-    'Get the market chart of a coin for a specific number of days and preprocess it'
+def get_data(coin: str, days: int):
+    'Get needed data for the `coin` in the last `days`'
     info = get_market_chart(coin, days)
-    df = pd.DataFrame(info)
-    print(df.head())
-    return df
-
+    return pd.DataFrame(info)
+    
 if __name__ == '__main__':
-    info = preprocess_data('btc', 1)
+    info = get_data('btc', 2)
     # print(info)
