@@ -1,7 +1,9 @@
+from unicodedata import name
 import streamlit as st
-from extract_data import get_coins, get_data, get_coin_info
+from extract_data import get_data, get_coin_info
 import plotly.express as px
 from plotly.subplots import make_subplots
+import plotly.graph_objects as go
 
 
 st.title('Cryptocurrency App')
@@ -15,12 +17,15 @@ with st.sidebar:
     
 if show_data:
     data = get_data(coin_symb, days)
+    print(data['prices'])
     fig = make_subplots(rows=3, cols=1)
-    fig.add_trace(px.line(data, x='dates', y='prices', title='Price'), row=1, col=1)
-    fig.add_trace(px.line(data, x='dates', y='market_caps', title='Market Cap'), row=2, col=1)
-    fig.add_trace(px.line(data, x='dates', y='total_volumes', title='Total Volume'), row=3, col=1)
-    # fig1 = px.line(data, x='dates', y='market_caps', title='Market Cap', )
-    # fig2 = px.line(data, x='dates', y='prices', title='Price')
-    # fig3 = px.line(data, x='dates', y='total_volumes', title='Total Volume')
+    fig.add_trace(go.Scatter(x=data['dates'], y=data['prices'], name='Price'),
+                  row=1, col=1)
+    fig.add_trace(go.Scatter(x=data['dates'], y=data['market_caps'], name='Market Cap'), 
+                  row=2, col=1)
+    fig.add_trace(go.Scatter(x=data['dates'], y=data['total_volumes'], name='Total Volume'), 
+                  row=3, col=1)
+    fig.update_layout(height=1200, width=800, 
+                      title_text=f"Price, Market Cap and Total Volume of {coin_symb.upper()}")
     st.plotly_chart(fig)
     
