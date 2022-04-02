@@ -1,7 +1,9 @@
 from cmath import inf
+import imp
 from pycoingecko import CoinGeckoAPI
 from datetime import datetime
 import pandas as pd
+import json
 
 cg = CoinGeckoAPI()
 
@@ -38,6 +40,12 @@ def get_data(coin: str, days: int):
     info = get_market_chart(coin, days)
     return pd.DataFrame(info)
     
+# def save_coin_info():
+#     name, symbols, ids = get_coins()
+#     coin_info =  {'names': name, 'symbols': symbols, 'ids': ids}
+#     json.dump(op)
+    
 if __name__ == '__main__':
     info = get_data('btc', 2)
-    # print(info)
+    names, symbols, ids = get_coins()
+    coin_info 
