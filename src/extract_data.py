@@ -1,5 +1,7 @@
 from cmath import inf
 from pycoingecko import CoinGeckoAPI
+from datetime import datetime
+import pandas as pd
 
 cg = CoinGeckoAPI()
 
@@ -14,21 +16,30 @@ def get_coins():
     return names, symbols, ids
     
     
-def get_market_chart(coin_name: str, days: int):
+def get_market_chart(coin: str, days: int):
     'Get the market chart of a coin for a specific number of days'
-    names, symbols, ids = get_coins()
+    _, symbols, ids = get_coins()
     try:
-        coin_id = ids[names.index(coin_name)]
+        coin_id = ids[symbols.index(coin)]
     except ValueError:
         raise Exception('Coin not found')
     info = cg.get_coin_market_chart_by_id(coin_id, vs_currency='usd', days=days)
+    timestamps = [t / 1000 for t, _ in info['prices']]
+    info['dates'] = [datetime.utcfromtimestamp(t) for t in timestamps]
+    
     info['prices'] = [p for _, p in info['prices']]
     info['market_caps'] = [m for _, m in info['market_caps']]
     info['total_volumes'] = [t for _, t in info['total_volumes']]
     return info
-    
+        
+
+def preprocess_data(coin: str, days: int):
+    'Get the market chart of a coin for a specific number of days and preprocess it'
+    info = get_market_chart(coin, days)
+    df = pd.DataFrame(info)
+    print(df.head())
+    return df
 
 if __name__ == '__main__':
-    info = get_market_chart('Bitcoin', 1)
-    print(info)
-    
+    info = preprocess_data('btc', 1)
+    # print(info)
