@@ -1,12 +1,13 @@
 import streamlit as st
-from extract_data import get_coins, get_data
+from extract_data import get_coins, get_data, get_coin_info
 import plotly.express as px
 from plotly.subplots import make_subplots
+
 
 st.title('Cryptocurrency App')
 
 with st.sidebar:
-    _, coin_symb, _ = get_coins()
+    _, coin_symb, _ = get_coin_info()
     coin_symb = st.selectbox('Select a coin', coin_symb)
     days = st.number_input('Number of days to get the data', min_value=1, value=1)
     

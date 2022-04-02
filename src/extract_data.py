@@ -1,5 +1,4 @@
 from cmath import inf
-import imp
 from pycoingecko import CoinGeckoAPI
 from datetime import datetime
 import pandas as pd
@@ -16,11 +15,22 @@ def get_coins():
         symbols.append(coins_info['symbol'])
         ids.append(coins_info['id']) 
     return names, symbols, ids
+
+    
+def save_coin_info():
+    name, symbols, ids = get_coins()
+    coin_info =  {'names': name, 'symbols': symbols, 'ids': ids}
+    json.dump(coin_info, open('src/data/coin_info.json', 'w+'))
+    
+    
+def get_coin_info():
+    coin_info = json.load(open('src/data/coin_info.json'))
+    return coin_info['names'], coin_info['symbols'], coin_info['ids']
     
     
 def get_market_chart(coin: str, days: int):
     'Get the market chart of a coin for a specific number of days'
-    _, symbols, ids = get_coins()
+    _, symbols, ids = get_coin_info()
     try:
         coin_id = ids[symbols.index(coin)]
     except ValueError:
@@ -40,12 +50,6 @@ def get_data(coin: str, days: int):
     info = get_market_chart(coin, days)
     return pd.DataFrame(info)
     
-# def save_coin_info():
-#     name, symbols, ids = get_coins()
-#     coin_info =  {'names': name, 'symbols': symbols, 'ids': ids}
-#     json.dump(op)
     
 if __name__ == '__main__':
-    info = get_data('btc', 2)
-    names, symbols, ids = get_coins()
-    coin_info 
+    pass
