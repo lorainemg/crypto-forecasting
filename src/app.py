@@ -14,9 +14,11 @@ with st.sidebar:
     
 if show_data:
     data = get_data(coin_symb, days)
-    fig1 = px.line(data, x='dates', y='market_caps', title='Market Cap')
-    fig2 = px.line(data, x='dates', y='prices', title='Price')
-    fig3 = px.line(data, x='dates', y='total_volumes', title='Total Volume')
-    st.plotly_chart(fig1)
-    st.plotly_chart(fig2)
-    st.plotly_chart(fig3)
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=data['dates'], y=data['prices'], 
+                             name='Price', mode='lines'))
+    fig.add_trace(go.Scatter(x=data['dates'], y=data['market_caps'], 
+                             name='Market Cap', mode='lines'))
+    fig.add_trace(go.Scatter(x=data['dates'], y=data['total_volumes'], 
+                             name='Total Volume', mode='lines'))
+    st.plotly_chart(fig)
