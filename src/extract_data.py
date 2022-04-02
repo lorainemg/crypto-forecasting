@@ -1,12 +1,13 @@
 from cmath import inf
 from pycoingecko import CoinGeckoAPI
 from datetime import datetime
+from typing import Tuple, List
 import pandas as pd
 import json
 
 cg = CoinGeckoAPI()
 
-def get_coins():
+def get_coins() -> Tuple[List[str], List[str], List[str]]:
     'Get coins from coingecko and separetes them in 3 lists: names, symbols and ids'
     coins = cg.get_coins_list()
     names, symbols, ids = [], [], []
@@ -18,17 +19,19 @@ def get_coins():
 
     
 def save_coin_info():
+    'Save coin info in a json file'
     name, symbols, ids = get_coins()
     coin_info =  {'names': name, 'symbols': symbols, 'ids': ids}
     json.dump(coin_info, open('src/data/coin_info.json', 'w+'))
     
     
-def get_coin_info():
+def get_coin_info() -> Tuple[List[str], List[str], List[str]]:
+    'Get coin info from the saved json file'
     coin_info = json.load(open('src/data/coin_info.json'))
     return coin_info['names'], coin_info['symbols'], coin_info['ids']
     
     
-def get_market_chart(coin: str, days: int):
+def get_market_chart(coin: str, days: int) -> dict:
     'Get the market chart of a coin for a specific number of days'
     _, symbols, ids = get_coin_info()
     try:
@@ -45,7 +48,7 @@ def get_market_chart(coin: str, days: int):
     return info
         
 
-def get_data(coin: str, days: int):
+def get_data(coin: str, days: int) -> pd.DataFrame:
     'Get needed data for the `coin` in the last `days`'
     info = get_market_chart(coin, days)
     return pd.DataFrame(info)
