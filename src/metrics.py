@@ -1,5 +1,5 @@
 "Several metrics for the analysis of time-series data are implemented"
-from this import d
+from re import L
 import numpy as np
 import pandas as pd
 from typing import Tuple 
@@ -35,11 +35,11 @@ def calculate_macd_oscilators(prices: pd.Series) -> Tuple[pd.Series, pd.Series, 
     long_ema = calculate_ema(prices, 26)
     macd = short_ema - long_ema
     
-    # get the 9-day EMA of the MACD fron the trigger line
-    trigger_line = calculate_ema(macd, 9)
+    # get the 9-day EMA of the MACD from the trigger line
+    signal = calculate_ema(macd, 9)
     # Calculate the difference between the MACD - Trigger for the Convergence/Divergence value
-    conv_val = macd - trigger_line
-    return macd, trigger_line, conv_val
+    conv_val = macd - signal
+    return macd, signal, conv_val
 
 def calculate_rsi(prices: pd.Series, period: int) -> pd.Series:
     'Calculate Relative Strength Index'

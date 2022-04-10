@@ -4,7 +4,6 @@ from datetime import datetime
 from typing import Tuple, List
 import pandas as pd
 import json
-from pprint import pprint
 
 cg = CoinGeckoAPI()
 
