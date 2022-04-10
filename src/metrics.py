@@ -29,6 +29,7 @@ def calculate_cma(prices: pd.Series, period: int) -> list:
     return prices.expanding(min_periods=period).mean()
 
 def calculate_macd_oscilators(prices: pd.Series):
+    'Calculate Moving Average Convergence Divergence'
     short_ema = calculate_ema(prices, 12)
     long_ema = calculate_ema(prices, 26)
     macd = short_ema - long_ema
@@ -39,5 +40,20 @@ def calculate_macd_oscilators(prices: pd.Series):
     conv_val = macd - trigger_line
     return macd, trigger_line, conv_val
 
+def calculate_rsi(prices: pd.Series, period: int):
+    'Calculate Relative Strength Index'
+    delta = prices.diff()
+    delta = delta[1:]
+    up, down = delta.copy(), delta.copy()
+    up[up < 0] = 0
+    down[down > 0] = 0
+    roll_up = up.rolling(window=period).mean()
+    roll_down = down.abs().rolling(window=period).mean()
+    rsi = 100 - (100 / (1 + roll_up / roll_down))
+    return rsi
+
+def calculate_mom(prices: pd.Series, period: int):
+    'Calculate Momentum'
+    return prices.diff(period)
 
     
