@@ -56,6 +56,14 @@ def plot_macd(data: pd.DataFrame):
     fig.update_layout(layout, height=600, width=1100)
     return fig
 
+def plot_other_oscillators(data: pd.DataFrame):
+    'Plot RSI and MOM'
+    fig = go.Figure(layout_title_text="Other Oscillators")
+    # fig.add_trace(go.Scatter(x=data['dates'], y=data['prices'], name='Price'))
+    fig.add_trace(go.Scatter(x=data['dates'], y=data['rsi'], name='RSI'))
+    fig.add_trace(go.Scatter(x=data['dates'], y=data['mom'], name='MOM'))
+    fig.update_layout(layout, height=600, width=1100)    
+    return fig
 
 
     

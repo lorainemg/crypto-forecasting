@@ -1,6 +1,6 @@
 import streamlit as st
 from extract_data import get_market_chart, get_coin_info
-from plots import plot_macd, plot_moving_averages, plot_simple_data
+from plots import plot_macd, plot_moving_averages, plot_other_oscillators, plot_simple_data
 
 from utils import get_data_metrics
 
@@ -28,4 +28,7 @@ if show_data:
     
     macd_fig = plot_macd(data)
     st.plotly_chart(macd_fig)
+    
+    oscillators_fig = plot_other_oscillators(data)
+    st.plotly_chart(oscillators_fig)
     
