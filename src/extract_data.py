@@ -4,6 +4,7 @@ from datetime import datetime
 from typing import Tuple, List
 import pandas as pd
 import json
+from pprint import pprint
 
 cg = CoinGeckoAPI()
 
@@ -45,14 +46,27 @@ def get_market_chart(coin: str, days: int) -> dict:
     info['prices'] = [p for _, p in info['prices']]
     info['market_caps'] = [m for _, m in info['market_caps']]
     info['total_volumes'] = [t for _, t in info['total_volumes']]
-    return info
+    return pd.DataFrame(info)
         
 
-def get_data(coin: str, days: int) -> pd.DataFrame:
-    'Get needed data for the `coin` in the last `days`'
-    info = get_market_chart(coin, days)
+def get_market_chart_range(coin: str, date_from: datetime, date_to: datetime) -> dict:
+    'Get the market chart of a coin for a specific date range'
+    _, symbols, ids = get_coin_info()
+    try:
+        coin_id = ids[symbols.index(coin)]
+    except ValueError:
+        raise Exception('Coin not found')
+    info = cg.get_coin_market_chart_range_by_id(coin_id, vs_currency='usd',
+                                                from_timestamp=date_from.timestamp(),
+                                                to_timestamp=date_to.timestamp())
+    timestamps = [t / 1000 for t, _ in info['prices']]
+    info['dates'] = [datetime.utcfromtimestamp(t) for t in timestamps]
+    
+    info['prices'] = [p for _, p in info['prices']]
+    info['market_caps'] = [m for _, m in info['market_caps']]
+    info['total_volumes'] = [t for _, t in info['total_volumes']]
     return pd.DataFrame(info)
     
     
 if __name__ == '__main__':
-    pass
+    get_market_chart_range('btc', datetime(2018, 1, 1), datetime(2018, 1, 3))
