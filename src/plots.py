@@ -23,17 +23,21 @@ def plot_simple_data(data: pd.DataFrame, coin_symb: str):
                   row=2, col=1)
     fig.add_trace(go.Scatter(x=data['dates'], y=data['total_volumes'], name='Total Volume (USD)', legendgroup='3'), 
                   row=3, col=1)
-    fig.update_layout(layout, height=1600, width=1000, 
+    fig.update_layout(layout, height=1600, width=1100, 
                       title_text=f"Price, Market Cap and Total Volume of {coin_symb.upper()}")
     return fig
 
 def plot_moving_averages(data: pd.DataFrame):
     'Plots moving averages in Plotly'
     fig = go.Figure(layout_title_text="Moving Averages")
-    fig.add_trace(go.Scatter(x=data['dates'], y=data['prices'], name='Price (USD)'))
-    fig.add_trace(go.Scatter(x=data['dates'], y=data['sma'], name='SMA (USD)'))
-    fig.add_trace(go.Scatter(x=data['dates'], y=data['cma'], name='CMA (USD)'))
-    fig.add_trace(go.Scatter(x=data['dates'], y=data['ema'], name='EMA (USD)'))
+    fig.add_trace(go.Scatter(x=data['dates'], y=data['prices'], name='Price (USD)',
+                             line=dict(width=2)))
+    fig.add_trace(go.Scatter(x=data['dates'], y=data['sma'], name='SMA (USD)',
+                             line=dict(width=2, dash='dot')))
+    fig.add_trace(go.Scatter(x=data['dates'], y=data['cma'], name='CMA (USD)',
+                             line=dict(width=2, dash='dot')))
+    fig.add_trace(go.Scatter(x=data['dates'], y=data['ema'], name='EMA (USD)',
+                             line=dict(width=2, dash='dot')))
     fig.update_layout(layout, height=600, width=1100)
     return fig
 
@@ -46,12 +50,12 @@ def plot_macd(data: pd.DataFrame):
     fig.add_trace(go.Scatter(x=data['dates'], y=data['signal'], name='Signal', 
                              line=dict(color='blue', width=2)))
     # Colorize the histogram values
-    colors = np.where(data['convergence-value'] < 0, 'blue', '#ff9900')
-    fig.add_trace(go.Bar(x=data['dates'], y=data['convergence-value'], name='Histogram',
+    colors = np.where(data['histogram'] < 0, 'blue', '#ff9900')
+    fig.add_trace(go.Bar(x=data['dates'], y=data['histogram'], name='Histogram',
                          marker_color=colors))
     fig.update_layout(layout, height=600, width=1100)
-
     return fig
+
 
 
     
