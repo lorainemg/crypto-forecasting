@@ -2,6 +2,7 @@
 from this import d
 import numpy as np
 import pandas as pd
+from typing import Tuple 
 
 # def calculate_sma(prices: list, period: int) -> list:
 #     'Simple moving average'
@@ -16,19 +17,19 @@ import pandas as pd
 #     return ema
 
 
-def calculate_sma(prices: pd.Series, period: int) -> list:
+def calculate_sma(prices: pd.Series, period: int) -> pd.Series:
     'Calculate Simple Moving Average'
     return prices.rolling(window=period).mean()
 
-def calculate_ema(prices: pd.Series, period: int) -> list:
+def calculate_ema(prices: pd.Series, period: int) -> pd.Series:
     'Calculate Exponential Moving Average'
     return prices.ewm(span=period, adjust=False, min_periods=period).mean()
 
-def calculate_cma(prices: pd.Series, period: int) -> list:
+def calculate_cma(prices: pd.Series, period: int) -> pd.Series:
     'Calculate Cumulative Moving Average'
     return prices.expanding(min_periods=period).mean()
 
-def calculate_macd_oscilators(prices: pd.Series):
+def calculate_macd_oscilators(prices: pd.Series) -> Tuple[pd.Series, pd.Series, pd.Series]:
     'Calculate Moving Average Convergence Divergence'
     short_ema = calculate_ema(prices, 12)
     long_ema = calculate_ema(prices, 26)
@@ -40,7 +41,7 @@ def calculate_macd_oscilators(prices: pd.Series):
     conv_val = macd - trigger_line
     return macd, trigger_line, conv_val
 
-def calculate_rsi(prices: pd.Series, period: int):
+def calculate_rsi(prices: pd.Series, period: int) -> pd.Series:
     'Calculate Relative Strength Index'
     delta = prices.diff()
     delta = delta[1:]
@@ -52,7 +53,7 @@ def calculate_rsi(prices: pd.Series, period: int):
     rsi = 100 - (100 / (1 + roll_up / roll_down))
     return rsi
 
-def calculate_mom(prices: pd.Series, period: int):
+def calculate_mom(prices: pd.Series, period: int) -> pd.Series:
     'Calculate Momentum'
     return prices.diff(period)
 
