@@ -1,10 +1,9 @@
 from unicodedata import name
 import streamlit as st
-from extract_data import get_data, get_coin_info
+from extract_data import get_market_chart, get_coin_info
 import plotly.express as px
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
-
 
 st.title('Cryptocurrency App')
 
@@ -16,7 +15,7 @@ with st.sidebar:
     show_data = st.button('Show Data')
     
 if show_data:
-    data = get_data(coin_symb, days)
+    data = get_market_chart(coin_symb, days)
     fig = make_subplots(rows=3, cols=1)
     fig.add_trace(go.Scatter(x=data['dates'], y=data['prices'], name='Price (USD)'),
                   row=1, col=1)
