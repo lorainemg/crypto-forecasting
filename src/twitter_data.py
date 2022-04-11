@@ -1,13 +1,15 @@
 import datetime
 from typing import List
 import tweepy
-from config import TWITTER_API_KEY, TWITTER_API_KEY_SECRET, TWITTER_BEARER_TOKEN
+from config import TWITTER_API_KEY, TWITTER_API_KEY_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_TOKEN_SECRET, TWITTER_BEARER_TOKEN
 
 # Twitter API credentials (can be found in https://developer.twitter.com/en/portal/projects-and-apps)
 client = tweepy.Client(
     consumer_key=TWITTER_API_KEY, 
     consumer_secret=TWITTER_API_KEY_SECRET,
-    access_token=TWITTER_BEARER_TOKEN
+    access_token=TWITTER_ACCESS_TOKEN,
+    access_token_secret=TWITTER_ACCESS_TOKEN_SECRET,
+    bearer_token=TWITTER_BEARER_TOKEN
 )
 
 def get_tweets(cryptocurrency: str, start_time: datetime, end_time: datetime, max_results: int) -> List[dict]:
