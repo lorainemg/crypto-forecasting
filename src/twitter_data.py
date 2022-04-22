@@ -35,8 +35,8 @@ def get_recent_tweets(cryptocurrency: str, max_results: int) -> List[tweepy.Twee
 def save_tweets(tweets: List[tweepy.Tweet]):
     'Save tweets in a json file.'
     tweets_data = [t.data for t in tweets]
-    with open('src/data/tweets.json', 'w') as out:
-        json.dump(tweets_data, out)
+    with open('src/data/tweets.json', 'w', encoding='utf-8') as out:
+        json.dump(tweets_data, out, ensure_ascii=False)
     
 
 if __name__ == '__main__':
