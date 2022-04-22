@@ -1,8 +1,11 @@
-import datetime
 from pprint import pprint
 from typing import List
-import tweepy
 from config import *
+
+import datetime
+import tweepy
+import json
+
 
 # Twitter API credentials (can be found in https://developer.twitter.com/en/portal/projects-and-apps)
 client = tweepy.Client(
@@ -29,6 +32,13 @@ def get_recent_tweets(cryptocurrency: str, max_results: int) -> List[tweepy.Twee
     return tweets.data
 
 
+def save_tweets(tweets: List[tweepy.Tweet]):
+    'Save tweets in a json file.'
+    tweets_data = [t.data for t in tweets]
+    with open('src/data/tweets.json', 'w') as out:
+        json.dump(tweets_data, out)
+    
+
 if __name__ == '__main__':
-    tweets = get_tweets('bitcoin', datetime.datetime(2020, 1, 1), datetime.datetime(2020, 12, 31), 10)
-    pprint(tweets)
+    tweets = get_tweets('bitcoin', 30, datetime.datetime(2020, 1, 1), datetime.datetime(2020, 12, 31))
+    save_tweets(tweets)
