@@ -30,7 +30,7 @@ class SentimentAnalyzer:
                                  'sentiment_score': sentences[idx].labels[0].score}
         return twitter_data
     
-    def save_tweets(tweets: List[dict]):
+    def save_tweets(self, tweets: List[dict]):
         'Save tweets in a json file.'
         with open('src/data/tweets.json', 'w', encoding='utf-8') as out:
             json.dump(tweets, out, ensure_ascii=False)

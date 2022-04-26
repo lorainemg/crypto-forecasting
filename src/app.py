@@ -7,7 +7,7 @@ from utils import get_data_metrics
 st.set_page_config(layout='wide')
 st.title('Cryptocurrency App')
 
-def show_market_data(coin_symb: str, days: int):
+def plot_market_data(coin_symb: str, days: int):
     'Show data of the selected coin in a several number of days'
     st.subheader('Market charts')
     
@@ -27,6 +27,10 @@ def show_market_data(coin_symb: str, days: int):
     st.plotly_chart(oscillators_fig)
 
 
+def plot_twitter_info(coin_symb: str, days: int):
+    
+    
+
 with st.sidebar:
     _, coin_symb, _ = get_coin_info()
     coin_symb = st.selectbox('Select a coin', coin_symb)
@@ -38,7 +42,7 @@ with st.sidebar:
                             help='Show the recent tweets related to the selected coin')
     
 if show_data:
-    show_market_data(coin_symb, days)
+    plot_market_data(coin_symb, days)
 elif show_tweets:
     
     

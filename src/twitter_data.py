@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from pprint import pprint
 from typing import List
 from config import *
@@ -17,7 +18,14 @@ client = tweepy.Client(
 )
 
 
-def get_tweets(cryptocurrency: str, max_results: int, start_time: datetime = None, end_time: datetime = None) -> List[tweepy.Tweet]:
+def get_recent_tweets(cryptocurrency: str, days: int):
+    'Get tweets of the last days related to a specifuc cryptocurrency'
+    end_time = datetime.datetime.now()
+    start_time = end_time - datetime.timedelta(days=days)
+    return get_tweets(cryptocurrency, max_results=None, start_time=start_time, end_time=end_time)
+
+
+def get_tweets(cryptocurrency: str, max_results: int=None, start_time: datetime = None, end_time: datetime = None) -> List[tweepy.Tweet]:
     'Get tweets related to a specific cryptocurrency.'
     tweets = client.search_all_tweets(query=cryptocurrency, max_results=max_results, 
                                       start_time=start_time, end_time=end_time,
@@ -25,7 +33,7 @@ def get_tweets(cryptocurrency: str, max_results: int, start_time: datetime = Non
     return tweets.data
 
 
-def get_recent_tweets(cryptocurrency: str, max_results: int) -> List[tweepy.Tweet]:
+def get_last_tweets(cryptocurrency: str, max_results: int) -> List[tweepy.Tweet]:
     'Get recent tweets related to a specific cryptocurrency.'
     tweets = client.search_recent_tweets(query=cryptocurrency, max_results=max_results, 
                                       tweet_fields=['id', 'text', 'created_at', 'lang'])
