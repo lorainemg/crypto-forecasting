@@ -14,6 +14,7 @@ layout = go.Layout(
         )
     ))
 
+
 def plot_simple_data(data: pd.DataFrame, coin_symb: str):
     'Plots data from coingecko'
     fig = make_subplots(rows=3, cols=1)
@@ -26,6 +27,7 @@ def plot_simple_data(data: pd.DataFrame, coin_symb: str):
     fig.update_layout(layout, height=1600, width=1100, 
                       title_text=f"Price, Market Cap and Total Volume of {coin_symb.upper()}")
     return fig
+
 
 def plot_moving_averages(data: pd.DataFrame):
     'Plots moving averages in Plotly'
@@ -40,6 +42,7 @@ def plot_moving_averages(data: pd.DataFrame):
                              line=dict(width=2, dash='dot')))
     fig.update_layout(layout, height=600, width=1100)
     return fig
+
 
 def plot_macd(data: pd.DataFrame):
     'Plot MACD information in Plotly'
@@ -56,6 +59,7 @@ def plot_macd(data: pd.DataFrame):
     fig.update_layout(layout, height=600, width=1100)
     return fig
 
+
 def plot_other_oscillators(data: pd.DataFrame):
     'Plot RSI and MOM'
     fig = go.Figure(layout_title_text="Other Oscillators")
@@ -65,8 +69,10 @@ def plot_other_oscillators(data: pd.DataFrame):
     fig.update_layout(layout, height=600, width=1100)    
     return fig
 
+
 def plot_sentiment_analysis(data: pd.DataFrame):
-    fig = go.Figure(layout_title_text='Sentiment Analysis')
+    'Plots sentiment analysis information in a Scatter Plot'
+    fig = go.Figure(layout_title_text='Sentiment Analysis Scatter Chart')
     fig.add_trace(go.Scatter(x=data['created_at'], y=data['sentiment_score'],
                              mode='markers', marker_color=data['sentiment_score'],
                              text=data['text']))
@@ -75,4 +81,11 @@ def plot_sentiment_analysis(data: pd.DataFrame):
     return fig
 
 
+def plot_sentiment_pie(data: pd.DataFrame):
+    'Plots Sentiment analysis information in Pie Chart'
+    counts = data.value_counts('sentiment')
+    fig = go.Figure(go.Pie(values=counts.values, labels=counts.keys(), title='Sentiment Analysis Pie Chart'))
+    fig.update_layout(layout, height=600, width=1100)
+    fig.update_traces(hoverinfo='label+percent', textinfo='value', textfont_size=20)
+    return fig
     
