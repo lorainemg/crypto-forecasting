@@ -101,6 +101,7 @@ Pympler = "==1.0.1"
 tweepy = "*"
 python-dotenv = "*"
 flair = "*"
+vadersentiment = "*"
 
 [dev-packages]
 

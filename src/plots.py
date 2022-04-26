@@ -65,5 +65,14 @@ def plot_other_oscillators(data: pd.DataFrame):
     fig.update_layout(layout, height=600, width=1100)    
     return fig
 
+def plot_sentiment_analysis(data: pd.DataFrame):
+    fig = go.Figure(layout_title_text='Sentiment Analysis')
+    fig.add_trace(go.Scatter(x=data['created_at'], y=data['sentiment_score'],
+                             mode='markers', marker_color=data['sentiment_score'],
+                             text=data['text']))
+    fig.update_traces(mode='markers', marker_line_width=2, marker_size=10)
+    fig.update_layout(layout, height=600, width=1100)
+    return fig
+
 
     
