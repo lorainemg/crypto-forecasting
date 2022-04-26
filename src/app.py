@@ -12,7 +12,10 @@ with st.sidebar:
     coin_symb = st.selectbox('Select a coin', coin_symb)
     days = st.number_input('Number of days to get the data', min_value=1, value=1)
     
-    show_data = st.button('Show Data')
+    show_data = st.button('Show Data', 
+                          help='Show data of related to the selected coin')
+    show_tweets = st.button('Show Tweets', 
+                            help='Show the recent tweets related to the selected coin')
     
 if show_data:
     st.subheader('Market charts')
