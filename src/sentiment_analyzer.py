@@ -7,12 +7,12 @@ import json
 class SentimentAnalyzer:
     '''Sentiment analyzer that uses Flair as background to analyze tweets'''
     def __init__(self) -> None:
-        self.classifier = TextClassifier('en-sentiment')
+        self.classifier = TextClassifier.load('en-sentiment')
         
     def preprocess_tweets(self, twitter_data: List[dict]):
         'Proprocess tweets from Twitter'
         tweets = [t for t in twitter_data if t['lang'] == 'en']
-        sentences = [Sentence(tweet['text']) for tweet in self.twitter_data] 
+        sentences = [Sentence(tweet['text']) for tweet in twitter_data] 
         return tweets, sentences
         
     def predict(self, twitter_data: List[dict]):
