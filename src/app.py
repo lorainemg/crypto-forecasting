@@ -1,6 +1,10 @@
+from datetime import datetime
+import json
 import streamlit as st
 from extract_data import get_market_chart, get_coin_info
 from plots import plot_macd, plot_moving_averages, plot_other_oscillators, plot_simple_data
+from sentiment_analyzer import SentimentAnalyzer
+from twitter_data import get_recent_tweets
 
 from utils import get_data_metrics
 
@@ -28,6 +32,11 @@ def plot_market_data(coin_symb: str, days: int):
 
 
 def plot_twitter_info(coin_symb: str, days: int):
+    # tweets = get_recent_tweets(coin_symb, days)
+    tweets = json.load(open('src/data/tweets.json', 'r'))
+    sent_analyzer = SentimentAnalyzer()
+    tweets = sent_analyzer.predict(tweets)
+    df = sent_analyzer.convert_tweets_to_df(tweets)
     
     
 
@@ -43,6 +52,9 @@ with st.sidebar:
     
 if show_data:
     plot_market_data(coin_symb, days)
-elif show_tweets:
+# elif show_tweets:
+
+if __name__ == '__main__':
+    plot_twitter_info('btc', 10)
     
     
