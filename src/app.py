@@ -7,17 +7,8 @@ from utils import get_data_metrics
 st.set_page_config(layout='wide')
 st.title('Cryptocurrency App')
 
-with st.sidebar:
-    _, coin_symb, _ = get_coin_info()
-    coin_symb = st.selectbox('Select a coin', coin_symb)
-    days = st.number_input('Number of days to get the data', min_value=1, value=1)
-    
-    show_data = st.button('Show Data', 
-                          help='Show data of related to the selected coin')
-    show_tweets = st.button('Show Tweets', 
-                            help='Show the recent tweets related to the selected coin')
-    
-if show_data:
+def show_market_data(coin_symb: str, days: int):
+    'Show data of the selected coin in a several number of days'
     st.subheader('Market charts')
     
     data = get_market_chart(coin_symb, days)
@@ -34,4 +25,20 @@ if show_data:
     
     oscillators_fig = plot_other_oscillators(data)
     st.plotly_chart(oscillators_fig)
+
+
+with st.sidebar:
+    _, coin_symb, _ = get_coin_info()
+    coin_symb = st.selectbox('Select a coin', coin_symb)
+    days = st.number_input('Number of days to get the data', min_value=1, value=1)
+    
+    show_data = st.button('Show Data', 
+                          help='Show data of related to the selected coin')
+    show_tweets = st.button('Show Tweets', 
+                            help='Show the recent tweets related to the selected coin')
+    
+if show_data:
+    show_market_data(coin_symb, days)
+elif show_tweets:
+    
     
