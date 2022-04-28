@@ -58,6 +58,3 @@ if show_data:
     plot_market_data(coin_symb, days)
 elif show_tweets:
     plot_twitter_info('btc', 10)
-    
-
-    

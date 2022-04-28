@@ -1,7 +1,6 @@
 from typing import List
 from datetime import datetime
-from flair.models import TextClassifier
-from flair.data import Sentence
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
 import json
 import pandas as pd
@@ -9,34 +8,34 @@ import pandas as pd
 class SentimentAnalyzer:
     '''Sentiment analyzer that uses Flair as background to analyze tweets'''
     def __init__(self) -> None:
-        # self.classifier = TextClassifier.load('en-sentiment')
-        pass
+        self.classifier = SentimentIntensityAnalyzer()
         
     def preprocess_tweets(self, twitter_data: List[dict]):
         'Proprocess tweets from Twitter'
         tweets = [t for t in twitter_data if t['lang'] == 'en']
-        sentences = [Sentence(tweet['text']) for tweet in twitter_data] 
+        sentences = [tweet['text'] for tweet in tweets] 
         return tweets, sentences
         
     def predict(self, twitter_data: List[dict]):
         'Predict Sentiment Analysis from Twitter and return the sentences with the labels'
         tweets, sentences = self.preprocess_tweets(twitter_data)
-        self.classifier.predict(sentences, mini_batch_size=32)
-        tweets = self.add_labels_data(tweets, sentences)
+        sentiment_dict = [self.classifier.polarity_scores(sent) for sent in sentences]
+        tweets = self.add_labels_data(tweets, sentiment_dict)
         return tweets
     
-    def add_labels_data(self, twitter_data: List[dict], sentences: List[Sentence]):
+    def add_labels_data(self, twitter_data: List[dict], sentiment_dict: List[dict]):
         'Add information of the sentiment analysis labels to the tweets'
         for idx in range(len(twitter_data)):
             twitter_data[idx] = {**twitter_data[idx], 
-                                 'sentiment': sentences[idx].labels[0].value,
-                                 'sentiment_score': sentences[idx].labels[0].score}
+                                 'sentiment_neg': sentiment_dict[idx]['neg'],
+                                 'sentiment_neu': sentiment_dict[idx]['neu'],
+                                 'sentiment_pos': sentiment_dict[idx]['pos'],
+                                 'sentiment_score': sentiment_dict[idx]['compound']}
         return twitter_data
     
     def convert_tweets_to_df(self, tweets: List[dict]):
         'Converts the tweets list to a dataframe'
         df = pd.DataFrame.from_records(tweets)
-        # print(df.head())
         df['created_at'] = df['created_at'].apply(lambda x: datetime.strptime(x, '%Y-%m-%dT%H:%M:%S.%f%z')) 
         df['sentiment_score'] = [t['sentiment_score'] if t['sentiment'] == 'POSITIVE' else -t['sentiment_score']
                                 for t in tweets]
@@ -52,7 +51,7 @@ class SentimentAnalyzer:
 if __name__ == '__main__':
     sa = SentimentAnalyzer()
     tweets = json.load(open('src/data/tweets.json'))
-    # tweets = sa.predict(tweets)
+    tweets = sa.predict(tweets)
     # sa.save_tweets(tweets)
     sa.convert_tweets_to_df(tweets)
     # print(tweets)
