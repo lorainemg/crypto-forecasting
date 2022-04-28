@@ -37,7 +37,7 @@ class SentimentAnalyzer:
         'Converts the tweets list to a dataframe'
         df = pd.DataFrame.from_records(tweets)
         df['created_at'] = df['created_at'].apply(lambda x: datetime.strptime(x, '%Y-%m-%dT%H:%M:%S.%f%z')) 
-        df['sentiment_score'] = [t['sentiment_score'] if t['sentiment'] == 'POSITIVE' else -t['sentiment_score']
+        df['sentiment'] = ['Positive' if t['sentiment_score'] >= 0.05 else 'Negative' if t['sentiment_score'] <= -0.05 else 'Neutral'
                                 for t in tweets]
         return df
 
@@ -52,7 +52,7 @@ if __name__ == '__main__':
     sa = SentimentAnalyzer()
     tweets = json.load(open('src/data/tweets.json'))
     tweets = sa.predict(tweets)
-    # sa.save_tweets(tweets)
+    sa.save_tweets(tweets)
     sa.convert_tweets_to_df(tweets)
     # print(tweets)
     
