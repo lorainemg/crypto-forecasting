@@ -1,3 +1,4 @@
+from matplotlib.pyplot import colorbar
 import numpy as np
 import pandas as pd
 import plotly.express as px
@@ -74,8 +75,14 @@ def plot_sentiment_analysis(data: pd.DataFrame):
     'Plots sentiment analysis information in a Scatter Plot'
     fig = go.Figure(layout_title_text='Sentiment Analysis Scatter Chart')
     fig.add_trace(go.Scatter(x=data['created_at'], y=data['sentiment_score'],
-                             mode='markers', marker_color=data['sentiment_score'],
-                             text=data['text']))
+                             mode='markers', text=data['text'], 
+                             
+                             marker=dict(
+                                 color=data['sentiment_score'],
+                                 cmax=1,
+                                 cmin=-1, 
+                                 colorscale=px.colors.sequential.RdBu,
+                                 colorbar=dict(title='Sentiment Score'))))
     fig.update_traces(mode='markers', marker_line_width=2, marker_size=10)
     fig.update_layout(layout, height=600, width=1100)
     return fig
