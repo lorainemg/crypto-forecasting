@@ -84,8 +84,9 @@ def plot_sentiment_analysis(data: pd.DataFrame):
 def plot_sentiment_pie(data: pd.DataFrame):
     'Plots Sentiment analysis information in Pie Chart'
     counts = data.value_counts('sentiment')
-    fig = go.Figure(go.Pie(values=counts.values, labels=counts.keys(), title='Sentiment Analysis Pie Chart'))
-    fig.update_layout(layout, height=600, width=1100)
+    fig = go.Figure(layout_title_text='Sentiment Analysis Pie Chart')
+    fig.add_trace(go.Pie(values=counts.values, labels=counts.keys()))
+    fig.update_layout(layout, height=600, width=1000)
     fig.update_traces(hoverinfo='label+percent', textinfo='value', textfont_size=20)
     return fig
     
