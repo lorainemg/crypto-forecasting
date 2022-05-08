@@ -96,4 +96,10 @@ def plot_sentiment_pie(data: pd.DataFrame):
     fig.update_layout(layout, height=600, width=1000)
     fig.update_traces(hoverinfo='label+percent', textinfo='value', textfont_size=20)
     return fig
+
+def plot_sentiment_count(df: pd.DataFrame):
+    'Plots sentiment analysis line chart'
+    fig = go.Figure(layout_title_text='Sentiment Analysis Line Chart')
+    grouped_df = df.groupby(df.created_at)['created_at'].count().rename('count').reset_index()
+    fig.add_trace(go.Scatter(x=grouped_df['created_at'], y=grouped_df['count'], name='Amounts of Tweets'))
     

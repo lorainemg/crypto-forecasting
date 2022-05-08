@@ -53,8 +53,9 @@ if __name__ == '__main__':
     tweets = json.load(open('src/data/tweets.json'))
     tweets = sa.predict(tweets)
     sa.save_tweets(tweets)
-    sa.convert_tweets_to_df(tweets)
-    # print(tweets)
+    df = sa.convert_tweets_to_df(tweets)
+    groups = df.groupby(df.created_at)['created_at'].count().rename('count').reset_index()
+    print(groups)
     
         
         
