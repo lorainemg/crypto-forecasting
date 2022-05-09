@@ -37,7 +37,6 @@ def plot_twitter_info(coin_symb: str, days: int):
     df = sent_analyzer.load_tweets('src/data/tweets.json')
     # tweets = sent_analyzer.predict(tweets)
     # df = sent_analyzer.convert_tweets_to_df(tweets)
-    print(df.head())
     sent_plot = plot_sentiment_analysis(df)
     st.plotly_chart(sent_plot)
     

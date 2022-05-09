@@ -1,4 +1,3 @@
-from traceback import print_tb
 from typing import List
 from datetime import datetime
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
@@ -30,7 +29,6 @@ class SentimentAnalyzer:
         twitter_data['sentiment_neu'] = [sent['neu'] for sent in sentiment_dict]
         twitter_data['sentiment_pos'] = [sent['pos'] for sent in sentiment_dict]
         twitter_data['sentiment_score'] = [sent['compound'] for sent in sentiment_dict]
-        print(twitter_data.head())
         return twitter_data
     
     def convert_tweets_to_df(self, tweets: List[dict]):
@@ -59,10 +57,6 @@ if __name__ == '__main__':
     sa = SentimentAnalyzer()
     tweets = sa.load_tweets('src/data/tweets.json')
     df = sa.predict(tweets)
-    print(df.head())
     sa.save_tweets(df)
-    groups = df.groupby(df.created_at)['created_at'].count().rename('count').reset_index()
-    print(groups)    
         
     df = sa.load_tweets('src/data/tweets.json') 
-    print(df)
