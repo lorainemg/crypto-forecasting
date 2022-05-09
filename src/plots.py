@@ -101,9 +101,9 @@ def plot_sentiment_count(df: pd.DataFrame):
     'Plots sentiment analysis line chart'
     fig = go.Figure(layout_title_text='Sentiment Analysis Line Chart')
     grouped_df = df.groupby(df.created_at)['created_at'].count().rename('count').reset_index()
-    positive_tweets = df.filter(lambda x: x['sentiment'] == 'Positive').groupby(df.created_at).count().rename('count').reset_index()
-    negative_tweets = df.filter(lambda x: x['sentiment'] == 'Negative').groupby(df.created_at).count().rename('count').reset_index()
-    neutral_tweets = df.filter(lambda x: x['sentiment'] == 'Neutral').groupby(df.created_at).count().rename('count').reset_index()
+    positive_tweets = df[df.sentiment == 'Positive'].groupby(df.created_at).count().rename('count').reset_index()
+    negative_tweets = df[df.sentiment == 'Negative'].groupby(df.created_at).count().rename('count').reset_index()
+    neutral_tweets = df[df.sentiment == 'Neutral'].groupby(df.created_at).count().rename('count').reset_index()
     
     fig.add_trace(go.Scatter(x=grouped_df['created_at'], y=grouped_df['count'], name='Tweets'))
     fig.add_trace(go.Scatter(x=negative_tweets['created_at'], y=negative_tweets['count'], name='Negative Tweets'))

@@ -11,27 +11,26 @@ class SentimentAnalyzer:
     def __init__(self) -> None:
         self.classifier = SentimentIntensityAnalyzer()
         
-    def preprocess_tweets(self, twitter_data: List[dict]):
+    def preprocess_tweets(self, twitter_data: pd.DataFrame):
         'Proprocess tweets from Twitter'
-        tweets = [t for t in twitter_data if t['lang'] == 'en']
-        sentences = [tweet['text'] for tweet in tweets] 
+        tweets = twitter_data[twitter_data.lang == 'en']
+        sentences = tweets.text
         return tweets, sentences
         
-    def predict(self, twitter_data: List[dict]):
+    def predict(self, twitter_data: pd.DataFrame):
         'Predict Sentiment Analysis from Twitter and return the sentences with the labels'
         tweets, sentences = self.preprocess_tweets(twitter_data)
         sentiment_dict = [self.classifier.polarity_scores(sent) for sent in sentences]
         tweets = self.add_labels_data(tweets, sentiment_dict)
         return tweets
     
-    def add_labels_data(self, twitter_data: List[dict], sentiment_dict: List[dict]):
+    def add_labels_data(self, twitter_data: pd.DataFrame, sentiment_dict: List[dict]):
         'Add information of the sentiment analysis labels to the tweets'
-        for idx in range(len(twitter_data)):
-            twitter_data[idx] = {**twitter_data[idx], 
-                                 'sentiment_neg': sentiment_dict[idx]['neg'],
-                                 'sentiment_neu': sentiment_dict[idx]['neu'],
-                                 'sentiment_pos': sentiment_dict[idx]['pos'],
-                                 'sentiment_score': sentiment_dict[idx]['compound']}
+        twitter_data['sentiment_neg'] = [sent['neg'] for sent in sentiment_dict]
+        twitter_data['sentiment_neu'] = [sent['neu'] for sent in sentiment_dict]
+        twitter_data['sentiment_pos'] = [sent['pos'] for sent in sentiment_dict]
+        twitter_data['sentiment_score'] = [sent['compound'] for sent in sentiment_dict]
+        print(twitter_data.head())
         return twitter_data
     
     def convert_tweets_to_df(self, tweets: List[dict]):
@@ -58,9 +57,8 @@ class SentimentAnalyzer:
     
 if __name__ == '__main__':
     sa = SentimentAnalyzer()
-    tweets = json.load(open('src/data/tweets.json'))
-    tweets = sa.predict(tweets)
-    df = sa.convert_tweets_to_df(tweets)
+    tweets = sa.load_tweets('src/data/tweets.json')
+    df = sa.predict(tweets)
     print(df.head())
     sa.save_tweets(df)
     groups = df.groupby(df.created_at)['created_at'].count().rename('count').reset_index()
