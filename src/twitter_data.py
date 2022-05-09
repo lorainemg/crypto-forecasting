@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from pprint import pprint
 from typing import List
+
+import pandas as pd
 from config import *
 
 import datetime
@@ -41,10 +43,11 @@ def get_last_tweets(cryptocurrency: str, max_results: int) -> List[tweepy.Tweet]
 
 
 def save_tweets(tweets: List[tweepy.Tweet]):
-    'Save tweets in a json file.'
+    'Save tweets in a dataframe format in a json file.'
     tweets_data = [t.data for t in tweets]
+    df = pd.DataFrame.from_records(tweets_data)
     with open('src/data/tweets.json', 'w', encoding='utf-8') as out:
-        json.dump(tweets_data, out, ensure_ascii=False)
+        json.dump(df.to_dict(), out, ensure_ascii=False)
     
 
 if __name__ == '__main__':
