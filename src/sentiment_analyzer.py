@@ -1,3 +1,4 @@
+from traceback import print_tb
 from typing import List
 from datetime import datetime
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
@@ -42,20 +43,28 @@ class SentimentAnalyzer:
         return df
 
     
-    def save_tweets(self, tweets: List[dict]):
+    def save_tweets(self, df: pd.DataFrame):
         'Save tweets in a json file.'
+        df['created_at'] = df['created_at'].astype(str)
+        tweets = df.to_dict()
         with open('src/data/tweets.json', 'w', encoding='utf-8') as out:
             json.dump(tweets, out, ensure_ascii=False)
     
+    def load_tweets(self, file_name: str) -> pd.DataFrame:
+        'Load tweets to a dataframe'
+        with open(file_name, 'r', encoding='utf-8') as inp:
+            tweets = json.load(inp)
+            return pd.DataFrame(tweets)
     
 if __name__ == '__main__':
     sa = SentimentAnalyzer()
     tweets = json.load(open('src/data/tweets.json'))
     tweets = sa.predict(tweets)
-    sa.save_tweets(tweets)
     df = sa.convert_tweets_to_df(tweets)
+    print(df.head())
+    sa.save_tweets(df)
     groups = df.groupby(df.created_at)['created_at'].count().rename('count').reset_index()
-    print(groups)
-    
+    print(groups)    
         
-        
+    df = sa.load_tweets('src/data/tweets.json') 
+    print(df)
