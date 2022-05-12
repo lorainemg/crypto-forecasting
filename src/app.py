@@ -5,6 +5,7 @@ from extract_data import get_market_chart, get_coin_info
 from plots import *
 from tweets.sentiment_analyzer import SentimentAnalyzer
 from tweets.twitter_data import get_recent_tweets
+from tweets.utils import load_tweets
 
 from utils import get_data_metrics
 
@@ -34,7 +35,7 @@ def plot_market_data(coin_symb: str, days: int):
 def plot_twitter_info(coin_symb: str, days: int):
     # tweets = get_recent_tweets(coin_symb, days)
     sent_analyzer = SentimentAnalyzer()
-    df = sent_analyzer.load_tweets('src/data/tweets.json')
+    df = load_tweets('src/data/tweets.json')
     # tweets = sent_analyzer.predict(tweets)
     # df = sent_analyzer.convert_tweets_to_df(tweets)
     sent_plot = plot_sentiment_analysis(df)

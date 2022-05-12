@@ -3,7 +3,7 @@ import re
 
 class TweetsPreprocessing:
     def __call__(self, tweets: pd.Dataframe) -> pd.DataFrame:
-        tweets = remove_urls(tweets)
+        tweets = self.remove_urls(tweets)
         print(tweets)
         
     def remove_urls(tweets: pd.DataFrame) -> pd.DataFrame:
@@ -12,4 +12,4 @@ class TweetsPreprocessing:
     
 
 if __name__ == '__main__':
-    
+    pass
