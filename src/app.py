@@ -3,8 +3,8 @@ import json, pandas as pd
 import streamlit as st
 from extract_data import get_market_chart, get_coin_info
 from plots import *
-from sentiment_analyzer import SentimentAnalyzer
-from twitter_data import get_recent_tweets
+from tweets.sentiment_analyzer import SentimentAnalyzer
+from tweets.twitter_data import get_recent_tweets
 
 from utils import get_data_metrics
 
