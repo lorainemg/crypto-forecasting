@@ -7,7 +7,11 @@ class TweetsPreprocessing:
     def __call__(self, tweets: pd.DataFrame) -> pd.DataFrame:
         tweets['raw_text'] = pd.Series(tweets['text'])
         tweets = self.remove_urls(tweets)
-        print(tweets)
+        tweets = self.remove_usernames(tweets)
+        tweets = self.deal_with_hashtags(tweets)
+        tweets = self.character_normalization(tweets)
+        tweets = self.remove_special_characters(tweets)
+        return self.to_lower_case(tweets)
         
     def remove_urls(self, tweets: pd.DataFrame) -> pd.DataFrame:
         'Removes the url of a list of tweets'
@@ -16,7 +20,7 @@ class TweetsPreprocessing:
     
     def remove_usernames(self, tweets: pd.DataFrame) -> pd.DataFrame:
         'Removes the usernames of a list of tweets'
-        tweets['text'] = tweets.text.apply(lambda x: re.sub(r'https?://[^ ]+', '', x))
+        tweets['text'] = tweets.text.apply(lambda x: re.sub(r'@[^ ]+', '', x))
         return tweets
     
     def deal_with_hashtags(self, tweets: pd.DataFrame) -> pd.DataFrame:
@@ -47,4 +51,5 @@ class TweetsPreprocessing:
 if __name__ == '__main__':
     tweets = load_tweets('src/data/tweets.json')
     tp = TweetsPreprocessing()
-    tp(tweets)
+    tweets = tp(tweets)
+    print(tweets.text)
