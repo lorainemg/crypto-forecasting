@@ -6,15 +6,18 @@ import json
 import pandas as pd
 
 from tweets.utils import load_tweets
+from tweets.preprocess_tweets import TweetsPreprocessing
 
 class SentimentAnalyzer:
     '''Sentiment analyzer that uses Flair as background to analyze tweets'''
     def __init__(self) -> None:
         self.classifier = SentimentIntensityAnalyzer()
+        self.tp = TweetsPreprocessing()
         
     def preprocess_tweets(self, twitter_data: pd.DataFrame):
         'Proprocess tweets from Twitter'
         tweets = twitter_data[twitter_data.lang == 'en']
+        tweets = self.tp(tweets)
         sentences = tweets.text
         return tweets, sentences
         

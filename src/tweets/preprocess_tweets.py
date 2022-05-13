@@ -1,7 +1,7 @@
 import pandas as pd
 import re
 
-from utils import load_tweets
+from tweets.utils import load_tweets
 
 class TweetsPreprocessing:
     def __call__(self, tweets: pd.DataFrame) -> pd.DataFrame:
@@ -46,10 +46,3 @@ class TweetsPreprocessing:
         'Transforms all capital letters to their lower case equivalent'
         tweets['text'] = tweets.text.apply(lambda x: x.lower())
         return tweets
-
-
-if __name__ == '__main__':
-    tweets = load_tweets('src/data/tweets.json')
-    tp = TweetsPreprocessing()
-    tweets = tp(tweets)
-    print(tweets.text)
