@@ -5,6 +5,8 @@ from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import json
 import pandas as pd
 
+from tweets.utils import load_tweets
+
 class SentimentAnalyzer:
     '''Sentiment analyzer that uses Flair as background to analyze tweets'''
     def __init__(self) -> None:
@@ -42,8 +44,8 @@ class SentimentAnalyzer:
     
 if __name__ == '__main__':
     sa = SentimentAnalyzer()
-    tweets = sa.load_tweets('src/data/tweets.json')
+    tweets = load_tweets('src/data/tweets.json')
     df = sa.predict(tweets)
     sa.save_tweets(df)
         
-    df = sa.load_tweets('src/data/tweets.json') 
+    df = load_tweets('src/data/tweets.json') 

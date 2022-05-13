@@ -1,39 +1,50 @@
 import pandas as pd
 import re
 
+from utils import load_tweets
+
 class TweetsPreprocessing:
-    def __call__(self, tweets: pd.Dataframe) -> pd.DataFrame:
+    def __call__(self, tweets: pd.DataFrame) -> pd.DataFrame:
+        tweets['raw_text'] = pd.Series(tweets['text'])
         tweets = self.remove_urls(tweets)
         print(tweets)
         
-    def remove_urls(tweets: pd.DataFrame) -> pd.DataFrame:
+    def remove_urls(self, tweets: pd.DataFrame) -> pd.DataFrame:
         'Removes the url of a list of tweets'
-        return tweets.apply(lambda x: re.sub(r'https?://[^ ]+', '', x.text))
+        tweets['text'] = tweets['text'].apply(lambda x: re.sub(r'https?://[^ ]+', '', x))
+        return tweets
     
-    def remove_usernames(tweets: pd.DataFrame) -> pd.DataFrame:
+    def remove_usernames(self, tweets: pd.DataFrame) -> pd.DataFrame:
         'Removes the usernames of a list of tweets'
-        return tweets.apply(lambda x: re.sub(r'@[^ ]+', '', x.text))
+        tweets['text'] = tweets.text.apply(lambda x: re.sub(r'https?://[^ ]+', '', x))
+        return tweets
     
-    def deal_with_hashtags(tweets: pd.DataFrame) -> pd.DataFrame:
+    def deal_with_hashtags(self, tweets: pd.DataFrame) -> pd.DataFrame:
         'Removes the character # to deal with hashtags'
-        return tweets.apply(lambda x: re.sub(r'#', '', x.text))
+        tweets['text'] = tweets.text.apply(lambda x: re.sub(r'#', '', x))
+        return tweets
 
-    def character_normalization(tweets: pd.DataFrame) -> pd.DataFrame:
+    def character_normalization(self, tweets: pd.DataFrame) -> pd.DataFrame:
         'Fix some uregurarly written words'
         # removes letters written more than one time (too simple)
-        return tweets.apply(lambda x: re.sub(r'([A-Za-z])\1{2,}', r'\1', x.text))
+        tweets['text'] = tweets.text.apply(lambda x: re.sub(r'#', '', x))
+        return tweets
 
-    def remove_special_characters(tweets: pd.DataFrame) -> pd.DataFrame:
+    def remove_special_characters(self, tweets: pd.DataFrame) -> pd.DataFrame:
         'Remove punctuation and single characters'
         def sub_special_char(tweet_text):
             tweet_text = re.sub(r' 0 ', 'zero', tweet_text)
             return re.sub(r'[^A-Za-z ]', '', tweet_text)
-        return tweets.apply(lambda x: sub_special_char(x.text))
+        tweets['text'] = tweets.text.apply(lambda x: sub_special_char(x))
+        return tweets
 
-    def to_lower_case(tweets: pd.DataFrame) -> pd.DataFrame:
+    def to_lower_case(self, tweets: pd.DataFrame) -> pd.DataFrame:
         'Transforms all capital letters to their lower case equivalent'
-        return tweets.apply(lambda x: x.text.lower())
+        tweets['text'] = tweets.text.apply(lambda x: x.lower())
+        return tweets
 
 
 if __name__ == '__main__':
-    pass
+    tweets = load_tweets('src/data/tweets.json')
+    tp = TweetsPreprocessing()
+    tp(tweets)
