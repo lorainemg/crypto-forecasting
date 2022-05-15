@@ -3,7 +3,7 @@ import re
 
 class TweetsPreprocessing:
     def __call__(self, tweets: pd.DataFrame) -> pd.DataFrame:
-        tweets['raw_text'] = pd.Series(tweets['text'])
+        tweets['raw_text'] = tweets['text'].copy()
         tweets = self.remove_urls(tweets)
         tweets = self.remove_usernames(tweets)
         tweets = self.deal_with_hashtags(tweets)
