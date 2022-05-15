@@ -29,14 +29,14 @@ class TweetsPreprocessing:
     def character_normalization(self, tweets: pd.DataFrame) -> pd.DataFrame:
         'Fix some uregurarly written words'
         # removes letters written more than one time (too simple)
-        tweets['text'] = tweets.text.apply(lambda x: re.sub(r'#', '', x))
+        tweets['text'] = tweets.text.apply(lambda x: re.sub(r'([A-Za-z])\1{2,}', r'\1', x))
         return tweets
 
     def remove_special_characters(self, tweets: pd.DataFrame) -> pd.DataFrame:
         'Remove punctuation and single characters'
         def sub_special_char(tweet_text):
             tweet_text = re.sub(r' 0 ', 'zero', tweet_text)
-            return re.sub(r'[^A-Za-z ]', '', tweet_text)
+            return re.sub(r'[^A-Za-z ]', ' ', tweet_text)
         tweets['text'] = tweets.text.apply(lambda x: sub_special_char(x))
         return tweets
 

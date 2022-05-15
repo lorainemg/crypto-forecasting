@@ -4,8 +4,8 @@ from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
 import pandas as pd
 
-from tweets.utils import load_tweets, save_tweets
-from tweets.preprocess_tweets import TweetsPreprocessing
+from utils import load_tweets, save_tweets
+from preprocess_tweets import TweetsPreprocessing
 
 class SentimentAnalyzer:
     '''Sentiment analyzer that uses Flair as background to analyze tweets'''
