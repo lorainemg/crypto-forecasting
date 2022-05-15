@@ -1,8 +1,6 @@
 import pandas as pd
 import re
 
-from tweets.utils import load_tweets
-
 class TweetsPreprocessing:
     def __call__(self, tweets: pd.DataFrame) -> pd.DataFrame:
         tweets['raw_text'] = pd.Series(tweets['text'])
