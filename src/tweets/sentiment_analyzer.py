@@ -4,8 +4,8 @@ from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
 import pandas as pd
 
-from utils import load_tweets, save_tweets
-from preprocess_tweets import TweetsPreprocessing
+from tweets.utils import load_tweets, save_tweets
+from tweets.preprocess_tweets import TweetsPreprocessing
 
 class SentimentAnalyzer:
     '''Sentiment analyzer that uses Flair as background to analyze tweets'''
@@ -37,7 +37,8 @@ class SentimentAnalyzer:
     
     def postprocessing(self, df: pd.DataFrame):
         'Converts the tweets list to a dataframe'
-        df['created_at'] = df['created_at'].apply(lambda x: datetime.strptime(x, '%Y-%m-%dT%H:%M:%S.%f%z')) 
+        if df['created_at'].dtype != 'O':
+            df['created_at'] = df['created_at'].apply(lambda x: datetime.strptime(x, '%Y-%m-%dT%H:%M:%S.%f%z')) 
         df['sentiment'] = df['sentiment_score'].apply(lambda x: 'Positive' if x >= 0.05 else 'Negative' if x <= -0.05 else 'Neutral')
         return df
 
