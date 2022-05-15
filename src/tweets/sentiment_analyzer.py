@@ -25,7 +25,7 @@ class SentimentAnalyzer:
         tweets, sentences = self.preprocess_tweets(twitter_data)
         sentiment_dict = [self.classifier.polarity_scores(sent) for sent in sentences]
         tweets = self.add_labels_data(tweets, sentiment_dict)
-        return tweets
+        return self.postprocessing(tweets)
     
     def add_labels_data(self, twitter_data: pd.DataFrame, sentiment_dict: List[dict]):
         'Add information of the sentiment analysis labels to the tweets'
@@ -35,12 +35,10 @@ class SentimentAnalyzer:
         twitter_data['sentiment_score'] = [sent['compound'] for sent in sentiment_dict]
         return twitter_data
     
-    def convert_tweets_to_df(self, tweets: List[dict]):
+    def postprocessing(self, df: pd.DataFrame):
         'Converts the tweets list to a dataframe'
-        df = pd.DataFrame.from_records(tweets)
         df['created_at'] = df['created_at'].apply(lambda x: datetime.strptime(x, '%Y-%m-%dT%H:%M:%S.%f%z')) 
-        df['sentiment'] = ['Positive' if t['sentiment_score'] >= 0.05 else 'Negative' if t['sentiment_score'] <= -0.05 else 'Neutral'
-                                for t in tweets]
+        df['sentiment'] = df['sentiment_score'].apply(lambda x: 'Positive' if x >= 0.05 else 'Negative' if x <= -0.05 else 'Neutral')
         return df
 
     

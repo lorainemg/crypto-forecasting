@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import List
 
 import pandas as pd
-from tweets.config import *
+from config import *
 
 import datetime
 import tweepy
