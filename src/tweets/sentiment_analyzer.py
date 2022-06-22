@@ -4,7 +4,7 @@ from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
 import pandas as pd
 
-from tweets.utils import load_tweets, save_tweets
+from utils import load_df, save_df
 from tweets.preprocess_tweets import TweetsPreprocessing
 
 class SentimentAnalyzer:
@@ -45,8 +45,8 @@ class SentimentAnalyzer:
     
 if __name__ == '__main__':
     sa = SentimentAnalyzer()
-    tweets = load_tweets('src/data/tweets.json')
+    tweets = load_df('src/data/tweets.json')
     df = sa.predict(tweets)
-    save_tweets(df)
+    save_df(df, 'src/data/tweets.json')
         
-    df = load_tweets('src/data/tweets.json') 
+    df = load_df('src/data/tweets.json') 
