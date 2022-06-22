@@ -40,14 +40,14 @@ def get_last_tweets(cryptocurrency: str, max_results: int) -> List[tweepy.Tweet]
     return tweets.data
 
 
-def save_tweets(tweets: List[tweepy.Tweet]):
+def save_tweets(tweets: List[tweepy.Tweet], save_file: str):
     'Save tweets in a dataframe format in a json file.'
     tweets_data = [t.data for t in tweets]
     df = pd.DataFrame.from_records(tweets_data)
-    with open('src/data/tweets.json', 'w', encoding='utf-8') as out:
+    with open(save_file, 'w', encoding='utf-8') as out:
         json.dump(df.to_dict(), out, ensure_ascii=False)
     
 
 if __name__ == '__main__':
     tweets = get_tweets('bitcoin', 30, datetime.datetime(2020, 1, 1), datetime.datetime(2020, 12, 31))
-    save_tweets(tweets)
+    save_tweets(tweets, 'src/data/tweets.json')
