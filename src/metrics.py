@@ -1,6 +1,4 @@
 "Several metrics for the analysis of time-series data are implemented"
-from re import L
-import numpy as np
 import pandas as pd
 from typing import Tuple 
 
