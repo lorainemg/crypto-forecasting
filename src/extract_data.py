@@ -1,9 +1,10 @@
-from cmath import inf
+import time
 from pycoingecko import CoinGeckoAPI
 from datetime import datetime
 from typing import Tuple, List
 import pandas as pd
 import json
+from utils import save_df
 
 cg = CoinGeckoAPI()
 
@@ -59,13 +60,24 @@ def get_market_chart_range(coin: str, date_from: datetime, date_to: datetime) ->
                                                 from_timestamp=date_from.timestamp(),
                                                 to_timestamp=date_to.timestamp())
     timestamps = [t / 1000 for t, _ in info['prices']]
-    info['dates'] = [datetime.utcfromtimestamp(t) for t in timestamps]
+    info['dates'] = [datetime.utcfromtimestamp(t).isoformat() for t in timestamps]
     
     info['prices'] = [p for _, p in info['prices']]
     info['market_caps'] = [m for _, m in info['market_caps']]
     info['total_volumes'] = [t for _, t in info['total_volumes']]
     return pd.DataFrame(info)
     
+def download_data(coins: list):
+    idx = 0
+    while idx < len(coins):
+        coin = coins[idx]
+        try:
+            df = get_market_chart_range(coin, datetime(2018, 1, 1), datetime(2022, 1, 1))
+            save_df(df, f'src/data/{coin}.json')
+            idx += 1
+        except:
+            time.sleep(60)
     
 if __name__ == '__main__':
-    get_market_chart_range('btc', datetime(2018, 1, 1), datetime(2018, 1, 3))
+    coins = ['btc', 'eth', 'usdt', 'usdc', 'bnb', 'busd', 'xrp', 'ada', 'sol', 'doge', 'dai', 'dot', 'slp']
+    download_data(coins)

@@ -1,6 +1,5 @@
 import json
 import pandas as pd
-from extract_data import get_market_chart
 
 from metrics import calculate_cma, calculate_ema, calculate_macd_oscilators, calculate_mom, calculate_rsi, calculate_sma
 
@@ -31,5 +30,4 @@ def save_df(df: pd.DataFrame, file_name: str):
     
     
 if __name__ == '__main__':
-    data = get_market_chart('btc', 1)
-    get_data_metrics(data, 10)
+    pass
